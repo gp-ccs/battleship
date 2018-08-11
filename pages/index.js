@@ -1,6 +1,8 @@
 import React from 'react';
 import { each, find, map } from 'lodash';
 
+import { wrapPageInRedux, Actions } from '../lib/store';
+
 function hasShip({
   ships, board, rowIdx, colIdx,
 }) {
@@ -46,7 +48,7 @@ function validateBoards({
   });
 }
 
-export default class extends React.Component {
+class BattleshipPage extends React.Component {
   static async getInitialProps() {
     return {};
   }
@@ -148,3 +150,8 @@ export default class extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({});
+
+export default wrapPageInRedux(BattleshipPage, mapStateToProps, mapDispatchToProps);
