@@ -26,6 +26,26 @@ function hasShip({
   return match;
 }
 
+function validateBoards({
+  ships, boards, boardWidth, boardHeight,
+}) {
+  each(boards, (board) => {
+    each(board, (shipData, shipName) => {
+      const shipDefinition = find(ships, { id: shipName });
+
+      if (shipData.direction === 'horizontal') {
+        if (shipData.x < 0 || shipData.x + shipDefinition.length > boardWidth) {
+          throw new Error('Invalid board! Some ships off board.');
+        }
+      } else if (shipData.direction === 'vertical') {
+        if (shipData.y < 0 || shipData.y + shipDefinition.length > boardHeight) {
+          throw new Error('Invalid board! Some ships off board.');
+        }
+      }
+    });
+  });
+}
+
 export default class extends React.Component {
   static async getInitialProps() {
     return {};
@@ -81,6 +101,13 @@ export default class extends React.Component {
     const {
       ships, boardWidth, boardHeight, boards, moves,
     } = this.state;
+
+    validateBoards({
+      ships,
+      boards,
+      boardWidth,
+      boardHeight,
+    });
 
     return (
       <div>
