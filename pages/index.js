@@ -64,7 +64,14 @@ class BattleshipPage extends React.Component {
 
   render() {
     const {
-      ships, boardWidth, boardHeight, boards, activePlayerId, placeShip,
+      ships,
+      boardWidth,
+      boardHeight,
+      gameMessage,
+      boards,
+      activePlayerId,
+      attack,
+      placeShip,
     } = this.props;
 
     const { placementDirection } = this.state;
@@ -78,6 +85,7 @@ class BattleshipPage extends React.Component {
     return (
       <div>
         {activePlayerId}
+        <div>{gameMessage}</div>
         {shipToBePlaced && (
           <div>
             Place your {shipToBePlaced.id}
@@ -112,7 +120,17 @@ class BattleshipPage extends React.Component {
           boardDefinition={adversaryBoard}
           shipDefinitons={ships}
           showShips={false}
-          onClickGrid={({ x, y }) => {}}
+          onClickGrid={({ x, y }) => {
+            if (shipToBePlaced) {
+              return false;
+            }
+
+            attack({
+              playerId: activePlayerId,
+              x,
+              y,
+            });
+          }}
         />
         <div>YOUR FLEET</div>
         <Board
@@ -140,18 +158,27 @@ class BattleshipPage extends React.Component {
 }
 
 const mapStateToProps = ({
-  ships, boardWidth, boardHeight, boards, activePlayerId,
+  ships,
+  boardWidth,
+  boardHeight,
+  boards,
+  activePlayerId,
+  gameMessage,
 }) => ({
   ships,
   boardWidth,
   boardHeight,
   boards,
   activePlayerId,
+  gameMessage,
 });
 
 const mapDispatchToProps = dispatch => ({
   placeShip: (options) => {
     dispatch(Actions.placeShip(options));
+  },
+  attack: (options) => {
+    dispatch(Actions.attack(options));
   },
 });
 
