@@ -1,5 +1,5 @@
 import React from 'react';
-import { find, map } from 'lodash';
+import { filter, find, map } from 'lodash';
 
 import { wrapPageInRedux, Actions } from '../lib/store';
 import { hasShip } from '../lib/utils';
@@ -8,6 +8,7 @@ const Board = ({
   height,
   width,
   playerId,
+  moves,
   boardDefinition,
   shipDefinitons,
   showShips,
@@ -34,6 +35,7 @@ const Board = ({
           >
             <input
               type="checkbox"
+              checked={!!find(moves, { x: colIdx, y: rowIdx })}
               onClick={(e) => {
                 e.preventDefault();
                 onClickGrid({
@@ -69,6 +71,7 @@ class BattleshipPage extends React.Component {
       boardHeight,
       gameMessage,
       boards,
+      moves,
       activePlayerId,
       attack,
       placeShip,
@@ -117,6 +120,7 @@ class BattleshipPage extends React.Component {
           height={boardHeight}
           width={boardWidth}
           playerId={adversaryId}
+          moves={filter(moves, { playerId: activePlayerId })}
           boardDefinition={adversaryBoard}
           shipDefinitons={ships}
           showShips={false}
@@ -137,6 +141,7 @@ class BattleshipPage extends React.Component {
           height={boardHeight}
           width={boardWidth}
           playerId={activePlayerId}
+          moves={filter(moves, { playerId: adversaryId })}
           boardDefinition={activePlayerBoard}
           shipDefinitons={ships}
           showShips
@@ -162,6 +167,7 @@ const mapStateToProps = ({
   boardWidth,
   boardHeight,
   boards,
+  moves,
   activePlayerId,
   gameMessage,
 }) => ({
@@ -169,6 +175,7 @@ const mapStateToProps = ({
   boardWidth,
   boardHeight,
   boards,
+  moves,
   activePlayerId,
   gameMessage,
 });
