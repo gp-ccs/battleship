@@ -11,6 +11,7 @@ const Board = ({
   moves,
   boardDefinition,
   shipDefinitons,
+  disabled,
   showShips,
   onClickGrid,
 }) => (
@@ -35,6 +36,7 @@ const Board = ({
           >
             <input
               type="checkbox"
+              disabled={disabled}
               checked={!!find(moves, { x: colIdx, y: rowIdx })}
               onClick={(e) => {
                 e.preventDefault();
@@ -70,6 +72,7 @@ class BattleshipPage extends React.Component {
       boardWidth,
       boardHeight,
       gameMessage,
+      gameOver,
       boards,
       moves,
       activePlayerId,
@@ -124,12 +127,13 @@ class BattleshipPage extends React.Component {
           boardDefinition={adversaryBoard}
           shipDefinitons={ships}
           showShips={false}
+          disabled={gameOver}
           onClickGrid={({ x, y }) => {
             if (shipToBePlaced) {
               return false;
             }
 
-            attack({
+            return attack({
               playerId: activePlayerId,
               x,
               y,
@@ -145,6 +149,7 @@ class BattleshipPage extends React.Component {
           boardDefinition={activePlayerBoard}
           shipDefinitons={ships}
           showShips
+          disabled={gameOver}
           onClickGrid={({ x, y }) => {
             if (activePlayerBoard.length < ships.length) {
               placeShip({
@@ -170,6 +175,7 @@ const mapStateToProps = ({
   moves,
   activePlayerId,
   gameMessage,
+  gameOver,
 }) => ({
   ships,
   boardWidth,
@@ -178,6 +184,7 @@ const mapStateToProps = ({
   moves,
   activePlayerId,
   gameMessage,
+  gameOver,
 });
 
 const mapDispatchToProps = dispatch => ({
