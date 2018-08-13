@@ -2,7 +2,7 @@ import React from 'react';
 import { filter, find, map } from 'lodash';
 
 import { wrapPageInRedux, Actions } from '../lib/store';
-import { hasShip } from '../lib/utils';
+import { getShipAtPosition } from '../lib/utils';
 
 const Board = ({
   height,
@@ -24,11 +24,11 @@ const Board = ({
             style={{
               background:
                 showShips &&
-                hasShip({
+                !!getShipAtPosition({
                   ships: shipDefinitons,
                   board: boardDefinition,
-                  rowIdx,
-                  colIdx,
+                  x: colIdx,
+                  y: rowIdx,
                 })
                   ? 'lightgray'
                   : 'blue',
@@ -82,10 +82,8 @@ class BattleshipPage extends React.Component {
 
     const { placementDirection } = this.state;
     const activePlayerBoard = boards[activePlayerId];
-
     const adversaryId = find(Object.keys(boards), o => o !== activePlayerId);
     const adversaryBoard = boards[adversaryId];
-
     const shipToBePlaced = find(ships, o => !find(activePlayerBoard, { shipId: o.id }));
 
     return (
