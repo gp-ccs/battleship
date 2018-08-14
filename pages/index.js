@@ -4,6 +4,8 @@ import { filter, find, map } from 'lodash';
 import { wrapPageInRedux, Actions } from '../lib/store';
 import { getShipAtPosition } from '../lib/utils';
 
+import { GameRow, GameCell, GameCellCustomUI, GameCellCheckbox } from '../styles';
+
 const Board = ({
   height,
   width,
@@ -17,25 +19,12 @@ const Board = ({
 }) => (
   <div>
     {map([...new Array(height)], (b, rowIdx) => (
-      <div key={`${playerId}-row${rowIdx}`}>
+      <GameRow key={`${playerId}-row${rowIdx}`}>
         {map([...new Array(width)], (c, colIdx) => (
-          <span
-            key={`${playerId}-row${rowIdx}-col${colIdx}`}
-            style={{
-              background:
-                showShips &&
-                !!getShipAtPosition({
-                  ships: shipDefinitons,
-                  board: boardDefinition,
-                  x: colIdx,
-                  y: rowIdx,
-                })
-                  ? 'lightgray'
-                  : 'blue',
-            }}
-          >
-            <input
+          <GameCell key={`${playerId}-row${rowIdx}-col${colIdx}`}>
+            <GameCellCheckbox
               type="checkbox"
+              id={`${playerId}-row${rowIdx}-col${colIdx}`}
               disabled={disabled}
               checked={!!find(moves, { x: colIdx, y: rowIdx })}
               onClick={(e) => {
@@ -46,24 +35,36 @@ const Board = ({
                 });
               }}
             />
-          </span>
+            <GameCellCustomUI
+              showShips={showShips}
+              hasShip={
+                !!getShipAtPosition({
+                  ships: shipDefinitons,
+                  board: boardDefinition,
+                  x: colIdx,
+                  y: rowIdx,
+                })
+              }
+              cellWasAttacked={!!find(moves, { x: colIdx, y: rowIdx })}
+            />
+          </GameCell>
         ))}
-      </div>
+      </GameRow>
     ))}
   </div>
 );
 
 class BattleshipPage extends React.Component {
-  static async getInitialProps() {
-    return {};
-  }
-
   constructor(props) {
     super(props);
 
     this.state = {
       placementDirection: 'horizontal',
     };
+  }
+
+  static async getInitialProps() {
+    return {};
   }
 
   render() {
