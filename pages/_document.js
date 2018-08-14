@@ -24,9 +24,9 @@ export default class MyDocument extends Document {
           <title>Battleship!</title>
           <link
             rel="stylesheet"
-            type="text/css"
             href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"
           />
+          <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet" />
 
           {this.props.styleTags}
         </Head>

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const CELL_SIZE = '25px';
+const CELL_SIZE = '30px';
 
 function getEmojiForCell(hasShip, cellWasAttacked, showShips) {
   if (cellWasAttacked && !hasShip) {
@@ -13,6 +13,35 @@ function getEmojiForCell(hasShip, cellWasAttacked, showShips) {
 
   return '🌊';
 }
+
+export const Game = styled.div`
+  text-align: center;
+`;
+
+export const GameMessage = styled.div`
+  text-transform: uppercase;
+  font-size: 2rem;
+  margin-top: 10px;
+`;
+
+export const GameHeader = styled.div`
+  background: white;
+  position: sticky;
+  top: 0;
+  padding: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+  font-family: 'Orbitron', sans-serif;
+  text-align: center;
+`;
+
+export const PlayerName = styled.span`
+  color: red;
+`;
+
+export const GameSide = styled.div`
+  display: inline-block;
+  padding: 10px;
+`;
 
 export const GameRow = styled.div`
   height: ${CELL_SIZE};

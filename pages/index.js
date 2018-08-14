@@ -4,7 +4,17 @@ import { filter, find, map } from 'lodash';
 import { wrapPageInRedux, Actions } from '../lib/store';
 import { getShipAtPosition } from '../lib/utils';
 
-import { GameRow, GameCell, GameCellCustomUI, GameCellCheckbox } from '../styles';
+import {
+  GameHeader,
+  PlayerName,
+  GameMessage,
+  Game,
+  GameSide,
+  GameRow,
+  GameCell,
+  GameCellCustomUI,
+  GameCellCheckbox,
+} from '../styles';
 
 const Board = ({
   height,
@@ -89,78 +99,86 @@ class BattleshipPage extends React.Component {
 
     return (
       <div>
-        {activePlayerId}
-        <div>{gameMessage}</div>
-        {shipToBePlaced && (
-          <div>
-            Place your {shipToBePlaced.id}
-            <input
-              type="radio"
-              value="horizontal"
-              checked={placementDirection === 'horizontal'}
-              onChange={(e) => {
-                this.setState({
-                  placementDirection: e.target.value,
-                });
-              }}
-            />{' '}
-            Horizontal
-            <input
-              type="radio"
-              value="vertical"
-              checked={placementDirection === 'vertical'}
-              onChange={(e) => {
-                this.setState({
-                  placementDirection: e.target.value,
-                });
-              }}
-            />Vertical
-          </div>
-        )}
-        <div>ENEMY</div>
-        <Board
-          height={boardHeight}
-          width={boardWidth}
-          playerId={adversaryId}
-          moves={filter(moves, { playerId: activePlayerId })}
-          boardDefinition={adversaryBoard}
-          shipDefinitons={ships}
-          showShips={false}
-          disabled={gameOver}
-          onClickGrid={({ x, y }) => {
-            if (shipToBePlaced) {
-              return false;
-            }
+        <GameHeader>
+          Current player: <PlayerName>{activePlayerId}</PlayerName>
+          <GameMessage>{gameMessage}</GameMessage>
+          {shipToBePlaced && (
+            <div>
+              Place your {shipToBePlaced.id}
+              <input
+                type="radio"
+                value="horizontal"
+                checked={placementDirection === 'horizontal'}
+                onChange={(e) => {
+                  this.setState({
+                    placementDirection: e.target.value,
+                  });
+                }}
+              />{' '}
+              Horizontal
+              <input
+                type="radio"
+                value="vertical"
+                checked={placementDirection === 'vertical'}
+                onChange={(e) => {
+                  this.setState({
+                    placementDirection: e.target.value,
+                  });
+                }}
+              />Vertical
+            </div>
+          )}
+        </GameHeader>
+        <Game>
+          <GameSide>
+            <div>THE ENEMY</div>
+            <Board
+              height={boardHeight}
+              width={boardWidth}
+              playerId={adversaryId}
+              moves={filter(moves, { playerId: activePlayerId })}
+              boardDefinition={adversaryBoard}
+              shipDefinitons={ships}
+              showShips={false}
+              disabled={gameOver}
+              onClickGrid={({ x, y }) => {
+                if (shipToBePlaced) {
+                  return false;
+                }
 
-            return attack({
-              playerId: activePlayerId,
-              x,
-              y,
-            });
-          }}
-        />
-        <div>YOUR FLEET</div>
-        <Board
-          height={boardHeight}
-          width={boardWidth}
-          playerId={activePlayerId}
-          moves={filter(moves, { playerId: adversaryId })}
-          boardDefinition={activePlayerBoard}
-          shipDefinitons={ships}
-          showShips
-          disabled={gameOver}
-          onClickGrid={({ x, y }) => {
-            if (activePlayerBoard.length < ships.length) {
-              placeShip({
-                playerId: activePlayerId,
-                shipId: shipToBePlaced.id,
-                x,
-                y,
-                direction: placementDirection,
-              });
-            }
-          }}
-        />
+                return attack({
+                  playerId: activePlayerId,
+                  x,
+                  y,
+                });
+              }}
+            />
+          </GameSide>
+          <GameSide>
+            <div>YOUR FLEET</div>
+            <Board
+              height={boardHeight}
+              width={boardWidth}
+              playerId={activePlayerId}
+              moves={filter(moves, { playerId: adversaryId })}
+              boardDefinition={activePlayerBoard}
+              shipDefinitons={ships}
+              showShips
+              disabled={gameOver}
+              onClickGrid={({ x, y }) => {
+                if (activePlayerBoard.length < ships.length) {
+                  placeShip({
+                    playerId: activePlayerId,
+                    shipId: shipToBePlaced.id,
+                    x,
+                    y,
+                    direction: placementDirection,
+                  });
+                }
+              }}
+            />
+          </GameSide>
+        </Game>
       </div>
     );
   }
