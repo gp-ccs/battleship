@@ -18,6 +18,8 @@ Tested in Node v8.9.1, but should function in any LTS or greater version of Node
 
 - CSS is Styled Components, which I've enjoyed recently for their nice, JS-centric functional style. More broadly I'm a big fan of SC for critical-path rendering and streaming CSS, though both of those are production optimizations that don't apply here :)
 
+- I included lodash for a handful of methods, some of which are also ES6 Array prototype methods (`find`, `filter`, etc.). I tend to prefer lodash's syntax and readability, but this is just a personal preference.
+
 ## If I had more time
 
 - I'd add `jest` and include some tests. Because I made a UI I was able to test for functionality, which is fine for a quick code challenge like this. But generally I coded this to be testable; the entire game is in Redux state, which should be fairly painless to test.
